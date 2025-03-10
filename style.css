@@ -39,9 +39,9 @@ body {
 }
   
 .navbar img {
-    height: 65px;  /* Change to desired height */
-    width: 150px;  /* Change to desired width */
-    object-fit: contain; /* Ensures the logo scales properly */
+    height: 65px;  
+    width: 150px;  
+    object-fit: contain; 
   }
   
 
@@ -78,8 +78,6 @@ body {
   width: 150px;
   border-radius: 50px;
   color: var(--black);
-  /* background-color: white;
-  box-shadow: var(--shadow); */
 
   cursor: pointer;
   border: 1px solid var(--secondary);
@@ -222,4 +220,96 @@ body {
 
 .dark-mode button {
     background-color: #61b4fc;
+}
+
+.profile-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.profile-container h1 {
+  margin-bottom: 20px;
+}
+
+.profile-container label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.profile-container input, 
+.profile-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.profile-container textarea {
+  height: 100px;
+}
+
+.profile-container button {
+  padding: 10px 20px;
+  background: var(--secondary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 15px;
+  border-radius: 5px;
+}
+
+.profile-container button:hover {
+  background: var(--blue);
+}
+
+.profile-picture {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-picture img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid var(--secondary);
+  object-fit: cover;
+}
+
+.profile-picture input {
+  display: block;
+  margin: 10px auto;
+}
+
+.dark-mode {
+  background-color: #222;
+  color: white;
+}
+
+.dark-mode input,
+.dark-mode textarea {
+  background-color: #333;
+  color: white;
+  border: 1px solid #61b4fc;
+}
+
+.dark-mode .profile-container {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode button {
+  background-color: #61b4fc;
+  color: white;
+  border: none;
 }
