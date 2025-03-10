@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <img src="/Users/cnky/Documents/UoSM_Logo.png" />
+        <ul class="navbar-list">
+            <li><a href="index.html">Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="help-container">
+        <h2>Help & Support</h2>
+        <p>Need assistance? Check our FAQs or contact us below.</p>
+
+        <h3>Frequently Asked Questions</h3>
+        <div class="faq">
+            <button class="faq-question">How do I change my profile picture?</button>
+            <div class="faq-answer">Go to your Profile page and click the upload button to select a new image.</div>
+
+            <button class="faq-question">How do I enable dark mode?</button>
+            <div class="faq-answer">Go to Settings and toggle the Dark Mode switch.</div>
+
+            <button class="faq-question">I forgot my password. What should I do?</button>
+            <div class="faq-answer">Click on "Forgot Password" on the login page and follow the instructions.</div>
+        </div>
+
+        <h3>Contact Support</h3>
+        <form id="support-form">
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+
+            <label for="message">Your Message:</label>
+            <textarea id="message" required placeholder="Describe your issue"></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="help.js"></script>
+</body>
+</html>
