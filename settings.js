@@ -1,42 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <nav class="navbar">
-        <img src="/Users/cnky/Documents/UoSM_Logo.png" />
-        <ul class="navbar-list">
-            <li><a href="index.html">Back</a></li>
-        </ul>
-    </nav>
+document.addEventListener("DOMContentLoaded", function () {
+    const darkModeToggle = document.getElementById("dark-mode");
+    const notificationsToggle = document.getElementById("notifications");
+    const fontSizeSelect = document.getElementById("font-size");
 
-    <div class="settings-container">
-        <h1>Settings</h1>
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+        darkModeToggle.checked = true;
+    }
 
-        <label for="dark-mode">Enable Dark Mode:</label>
-        <input type="checkbox" id="dark-mode">
-        <br><br>
+    if (localStorage.getItem("notifications") === "enabled") {
+        notificationsToggle.checked = true;
+    }
 
-        <label for="notifications">Enable Notifications:</label>
-        <input type="checkbox" id="notifications">
-        <br><br>
+    if (localStorage.getItem("fontSize")) {
+        document.body.style.fontSize = localStorage.getItem("fontSize");
+        fontSizeSelect.value = localStorage.getItem("fontSize");
+    }
 
-        <label for="font-size">Font Size:</label>
-        <select id="font-size">
-            <option value="14px">Small</option>
-            <option value="16px" selected>Medium</option>
-            <option value="18px">Large</option>
-            <option value="20px">Extra Large</option>
-        </select>
-        <br><br>
+    window.saveSettings = function () {
+        if (darkModeToggle.checked) {
+            localStorage.setItem("darkMode", "enabled");
+            document.body.classList.add("dark-mode");
+        } else {
+            localStorage.setItem("darkMode", "disabled");
+            document.body.classList.remove("dark-mode");
+        }
 
-        <button onclick="saveSettings()">Save Settings</button>
-    </div>
+        if (notificationsToggle.checked) {
+            localStorage.setItem("notifications", "enabled");
+        } else {
+            localStorage.setItem("notifications", "disabled");
+        }
 
-    <script src="settings.js"></script>
-</body>
-</html>
+        localStorage.setItem("fontSize", fontSizeSelect.value);
+        document.body.style.fontSize = fontSizeSelect.value;
+
+        alert("Settings saved!");
+    };
+});
