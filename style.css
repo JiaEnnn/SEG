@@ -375,3 +375,88 @@ h2, h3 {
   color: white;
   border: 1px solid #61b4fc;
 }
+
+.inbox-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h2 {
+  color: #027aea;
+}
+
+.inbox-list {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.inbox-item {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background1 0.3s;
+}
+
+.inbox-item:last-child {
+  border-bottom: none;
+}
+
+.inbox-item:hover {
+  background-color: #f1f1f1;
+}
+
+.sender-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.message-preview {
+  font-size: 1rem;
+  margin-top: 5px;
+  color: #333;
+}
+
+.message-box {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.message-content {
+  min-height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.dark-mode .inbox-container {
+  background-color: #333;
+  color: white;
+}
+
+.dark-mode .inbox-item {
+  background-color: #444;
+  border-bottom: 1px solid #666;
+}
+
+.dark-mode .inbox-item:hover {
+  background-color: #555;
+}
+
+.dark-mode .message-box {
+  background-color: #444;
+  border-color: #666;
+}
+
+.dark-mode .message-content {
+  background-color: #555;
+  color: white;
+}
