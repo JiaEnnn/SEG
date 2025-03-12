@@ -1,0 +1,23 @@
+extends layout
+
+block layout-content
+  style(type="text/css").
+    .input {
+      width: 240px;
+      margin: 0 10px;
+      text-align: center;
+      letter-spacing: 8px;
+      font-size: 28px;
+    }
+  div.View
+    h1.Banner UniSystem
+    h2 Sign Up
+    h3 An email is sent to #{form.email} for verification. You will be logged in after verification.
+    form#inputs(method="post")
+      label#label(for="code", style="font-size: 28px;") Verification code
+      br
+      input.input(type="text", name="code", placeholder="XXXXXX", inputmode="numeric", maxlength="6")
+      br
+      label#error(name="error", style="color: red; font-size: 18px")=error
+      br
+      button(type="submit") Verify

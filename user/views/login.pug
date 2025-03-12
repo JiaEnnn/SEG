@@ -1,0 +1,21 @@
+extends layout
+
+block layout-content
+  div.View
+    h1.Banner UniSystem
+    h2 Login
+    form(method="post")
+      label(for="email") Email address:
+      br
+      input(type="email", name="email", placeholder="Email", value=form.email, required)
+      br
+      label(for="password") Password:
+      br
+      input(type="password", name="password", placeholder="Password",value=form.password, required)
+      br
+      label(id="loginError", name="login-error", style="color: red;")=loginError
+      br
+      button(type="submit") Log In
+      br
+      a(href="/signup") Or #[strong Sign Up] with university email
+  
