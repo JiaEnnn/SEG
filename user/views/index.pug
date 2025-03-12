@@ -8,6 +8,19 @@ block layout-content
         h1 Welcome, #{userType}!
       br
       form(method="post")
-        button Logout 
+        button#logoutButton Logout
+        button#loginButton Login 
+  
+  script(type="text/javascript").
+    const logout = document.getElementById('logoutButton');
+    const login = document.getElementById('loginButton');
+    const isLoggedIn = #{loggedIn};
+    if (isLoggedIn) {
+      logout.style.display = 'inline';
+      login.style.display = 'none';
+    } else {
+      logout.style.display = 'none';
+      login.style.display = 'inline';
+    };
       
       

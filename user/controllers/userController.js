@@ -182,8 +182,12 @@ exports.loginSetup = (res, form={}, err="") => {
 exports.indexSetup = (res, err="") => {
   // send them back if not logged
   if (User.isLoggedOut()) {
-      console.log('Not logged in, returning.')
-      res.redirect('/login');
+      console.log('Not logged in, default as guest.')
+      res.render('./index', {
+        title: 'Main',
+        userType: 'Guest',
+        loggedIn: false,
+      });
       return;
   };
 
@@ -192,6 +196,7 @@ exports.indexSetup = (res, err="") => {
     res.render('./index', {
       title: 'Main',
       userType: data.name,
+      loggedIn: true,
     });
   });
 };
