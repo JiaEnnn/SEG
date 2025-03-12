@@ -125,6 +125,51 @@ body {
   color: var(--blue);
 }
 
+.profile-dropdown-img {
+  width: 5px; /* Adjust size */
+  height: 10px; 
+}
+
+/* Make Profile item align correctly */
+.profile-dropdown-list-item.no-hover {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px;
+  gap: 0px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column; /* Stack name & link */
+  margin-left: 10px; /* Space between image and text */
+}
+
+.profile-name {
+  font-size: 1rem; /* Bigger font for name */
+  font-weight: bold;
+}
+
+.profile-link:hover{
+  font-size: 0.8rem; /* Smaller font for link */
+  color: var(--blue); /* Adjust color */
+  text-decoration: underline; /* Remove underline */
+  margin-top: 5px; /* Space below name */
+  text-decoration: underline; /* Underline on hover */
+  cursor: default
+}
+
+.profile-dropdown-list-item.no-hover .profile-link {
+  color: var(--blue) !important; /* Always blue */
+  text-decoration: underline; /* No underline by default */
+  font-size: 0.8rem; /* Adjust size */
+}
+
+.profile-dropdown-list-item.no-hover .profile-link:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+
+
 .profile-dropdown-btn span {
   margin: 0 0.5rem;
   margin-right: 0;
@@ -163,6 +208,7 @@ body {
   border: 0.5px solid var(--blue);
 }
 
+
 .profile-dropdown-list.active {
   max-height: 500px;
 }
@@ -188,6 +234,7 @@ body {
   font-weight: 500;
   color: var(--black);
 }
+
 .dark-mode .profile-dropdown-list-item a {
   display: flex;
   align-items: center;
@@ -198,7 +245,6 @@ body {
 }
 
 .profile-dropdown-list-item a i {
-  margin-right: 0.8rem;
   font-size: 1.1rem;
   width: 2.3rem;
   height: 2.3rem;
@@ -210,8 +256,8 @@ body {
   border-radius: 50%;
   transition: margin-right 0.3s;
 }
+
 .dark-mode .profile-dropdown-list-item a i {
-  margin-right: 0.8rem;
   font-size: 1.1rem;
   width: 2.3rem;
   height: 2.3rem;
@@ -230,6 +276,11 @@ body {
 .dark-mode .profile-dropdown-list-item:hover {
   padding-left: 1.5rem;
   background-color: var(--secondary-light);
+}
+.no-hover:hover {
+  padding-left: 10px !important; /* Prevent movement */
+  background-color: transparent !important; /* Remove hover effect */
+  cursor: default !important; /* Remove hand cursor */
 }
 
 .settings-container {
