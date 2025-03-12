@@ -36,7 +36,6 @@ exports.createOTP = () => {
         lowerCaseAlphabets: false,
         specialChars: false
     });
-    console.log(otp);
     return otp;
 };
 
