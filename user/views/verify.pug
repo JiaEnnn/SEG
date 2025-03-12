@@ -13,6 +13,11 @@ block layout-content
     h1.Banner UniSystem
     h2 Sign Up
     h3 An email is sent to #{form.email} for verification. You will be logged in after verification.
+    h3 If no email is received, add 'uosm.segp@gmail.com' to safe senders list.
+    p(style="font-size: 20px;") Instructions: 
+    br
+    a(href="https://support.microsoft.com/en-us/office/add-recipients-to-the-safe-senders-list-in-outlook-be1baea0-beab-4a30-b968-9004332336ce", style="font-size: 20px;") MS: add recipents to safe sender list
+    br
     form#inputs(method="post")
       label#label(for="code", style="font-size: 28px;") Verification code
       br

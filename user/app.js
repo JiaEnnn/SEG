@@ -28,10 +28,8 @@ app.use(sessions({
 }));
 
 // set view engine for pug
-app.set('views', './views');
+app.set('views', './user/views');
 app.set('view engine', 'pug');
-
-// userController.findUserTypeOf(0).then((data) => console.log(JSON.stringify(data)));
 
 app.get('/signup', (req, res) => {
   userController.signupSetup(res);

@@ -89,9 +89,9 @@ exports.signUpChecks = async (req, res, next) => {
     res.redirect('/signup/verify');
 
     const otp = mail.createOTP();
-    const text = `To verify your email address and complete sign up, enter the verification code on the application. \nVerification Code: ${otp}`;
-    const subject = "[UoSM SEG] Verify to Sign Up to SEG G5 Application";
-    const html = `<b> ${otp} <b>`
+    const text = `To verify your email address and complete sign up, enter the verification code on the application. \n\nVerification Code: ${otp}`;
+    const subject = "[UoSM SEGP] Verify to Sign Up to CampusNavigation";
+    const html = `<b> ${otp}<b>`
     mail.storeOTP(otp);
     mail.sendMail(body.email, subject, text, '');
 

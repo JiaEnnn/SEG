@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 exports.sendMail = async (dests, subject, text, html) => {
     // send mail with defined transport object
     const mailOptions = {
-        from: '"UoSM SEG System" <youquanneu4@gmail.com>', // sender address
+        from: '"UoSM SEG System" <uosm.segp@gmail.com>', // sender address
         to: dests,        // list of receivers
         subject: subject, // Subject line
         text: text,       // plain text body
@@ -26,12 +26,8 @@ exports.sendMail = async (dests, subject, text, html) => {
         console.log(dests);
         return inf;
     });
-    // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
     return info;
 };
-
-// exports.otpVerification()
-
 
 exports.createOTP = () => {
     const otp = otpGenerator.generate(6, {
@@ -57,4 +53,5 @@ exports.clearOTP = () => {
 };
 
 // https://stackoverflow.com/questions/55805264/how-to-store-time-based-otp-secret-key-in-mysql
-// this.sendMail("lqypublic@gmail.com","OTP for Signing Up ✔","text","<b>Hello world HTML 3</b>").catch(console.error);
+// this.sendMail("qyl1g22@soton.ac.uk","OTP for Signing Up ✔","text","<b>Hello world HTML 3</b>").catch(console.error);
+// UoS seems to have blocked something
