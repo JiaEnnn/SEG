@@ -259,12 +259,14 @@ class User extends Model {
   static async signUp(email, pass1, pass2) {
     await this.signUpChecks(email, pass1, pass2);
 
+    const userTypeID = (this.isStudent(email))? 1 : 2;
+
     const result = await User.create({
       name: null,
       email: email,
       password: pass1,
       salt: '',
-      userTypeID: 1,
+      userTypeID: userTypeID,
     });
     process.env.USER = result.userID;
     return result.userID;
@@ -303,6 +305,10 @@ class User extends Model {
   };
   static isLoggedOut() {
     return process.env.USER == -1;
+  };
+  static isStudent(email) {
+    const regex = /([a-zA-Z]+\d[a-zA-Z]\d\d@soton.ac.uk)$/;
+    return regex.test(email);
   };
 };
 
