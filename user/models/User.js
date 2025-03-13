@@ -307,6 +307,8 @@ class User extends Model {
     return process.env.USER == -1;
   };
   static isStudent(email) {
+    // student: [anyChars] [1 Digit] [1 Char] [two Digits] @soton.ac.uk
+    // others: username @ devdomain.soton.ac.uk
     const regex = /([a-zA-Z]+\d[a-zA-Z]\d\d@soton.ac.uk)$/;
     return regex.test(email);
   };
