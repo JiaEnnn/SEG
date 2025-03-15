@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="style.css" />
+  
+    <link rel="stylesheet" href="/style.css?v=2" />
     <title>Profile Dropdown</title>
   </head>
   <body>
     <nav class="navbar">
-      <img src="/Users/cnky/Documents/UoSM_Logo.png" />
+      <img src="../Pictures/UoSMLogo.png" />
       <ul class="navbar-list">
         <li><a href="#">Maps</a></li>
         <li><a href="#">Bookings</a></li>
@@ -35,7 +36,7 @@
 
         <ul class="profile-dropdown-list">
           <div class="profile-dropdown-list-item no-hover">
-            <img src="/Users/cnky/Desktop/jin.jpeg" alt="User Photo" class="profile-dropdown-img">
+            <img src="../Pictures/SteveJobs.jpg" alt="User Photo" class="profile-dropdown-img">
             <div class="profile-info">
               <span class="profile-name">Ng Jin</span>
               <a href="profile.html" class="profile-link">View your profile</a>
@@ -47,7 +48,7 @@
           
           <li class="profile-dropdown-list-item">
             <a href="inbox.html">
-                <i class="fa-regular fa-envelope"></i>
+              <i class="fas fa-envelope"></i> 
                Inbox
             </a>
           </li>  
@@ -61,7 +62,7 @@
 
           <li class="profile-dropdown-list-item">
             <a href="settings.html">
-                <i class="fa-solid fa-sliders"></i>
+              <i class="fas fa-sliders-h"></i>
                 Settings
             </a>
           </li>        
@@ -71,17 +72,15 @@
               <i class="fa-regular fa-circle-question"></i>
               Help & Support
             </a>
-          </li>
+          </li>          
           <hr />
 
           <li class="profile-dropdown-list-item">
-            <a href="#">
+            <a href="/logout" id="logHref">
               <i class="fa-solid fa-arrow-right-from-bracket"></i>
               Log out
             </a>
-          </li>
-          
-        </li>        
+          </li>     
         </ul>
       </div>
     </nav>
@@ -91,6 +90,25 @@
     <script src="help.js"></script>
     <script src="inbox.js"></script>
     <script src="analytics.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+      fetch('http://localhost:5000/api/your-endpoint')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error fetching data:', error));
+      
+        fetch("/index/id", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then((res) => res.json())
+        .then((res) => {
+            const id = res.id;
+            document.getElementById("logHref").innerText = (id == -1)? 'Log In' : 'Log Out';
+        })
+        .catch((err) => console.error('Error:', err));
     </script>
   </body>
 </html>

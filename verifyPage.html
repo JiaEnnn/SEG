@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <title>Verify Email | UniSystem</title>
+    <link rel="stylesheet" href="/loginstyle.css">
+</head>
+<body>
+    <div class="View">
+        <h1 class="Banner">UniSystem</h1>
+        <h2>Sign Up</h2>
+        <h3>An email is sent to <span id="userEmail"></span> for verification. You will be logged in after verification.</h3>
+        <h3>If no email is received, add 'uosm.segp@gmail.com' to your safe senders list.</h3>
+
+        <p style="font-size: 20px;">Instructions:</p>
+        <br>
+        <a href="https://support.microsoft.com/en-us/office/add-recipients-to-the-safe-senders-list-in-outlook-be1baea0-beab-4a30-b968-9004332336ce" style="font-size: 20px;">
+            MS: Add recipients to safe sender list
+        </a>
+        <br>
+
+        <form id="inputs" method="post">
+            <label id="label" for="code" style="font-size: 28px;">Verification Code</label>
+            <br>
+            <input id="code" class="input" type="text" name="code" placeholder="XXXXXX" inputmode="numeric" maxlength="6">
+            <br>
+            <label id="error" name="error" style="color: red; font-size: 18px;"></label>
+            <br>
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+
+    <script>
+        let userEmail = document.getElementById("userEmail");
+        fetch("/signup/verify/email", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then((res) => res.json())
+        .then((res) => {
+            const emailFromServer = res.email;
+            document.getElementById("userEmail").textContent = emailFromServer;
+        })
+        .catch((err) => console.error('Error:', err));
+
+        document.getElementById("inputs").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let code = document.getElementById("code");
+            let error = document.getElementById("error");
+
+            fetch("/signup/verify", {
+                method: "POST",
+                body: JSON.stringify({
+                    code: code.value
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then((res) => res.json())
+            .then((res) => {
+                if (res.error == false)  {
+                    window.location.href = '/index';
+                } else {
+                    error.innerHTML = res.error;
+                    error.style.display = 'block';
+                }
+            })
+            .catch((err) => console.error('Error:', err));
+        });
+        // const emailFromServer = "user@example.com"; // This should be dynamically inserted
+        // document.getElementById("userEmail").textContent = emailFromServer;
+    </script>
+</body>
+</html>

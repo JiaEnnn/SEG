@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <title>Sign Up | UniSystem</title>
+    <link rel="stylesheet" href="/loginstyle.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Sign Up</h1>
+
+        <form id="signupForm" class="form-box">
+            <label for="email">Email address:</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" name="password1" placeholder="Password" required>
+
+            <label for="password2">Confirm Password:</label>
+            <input type="password" id="password2" name="password2" placeholder="Re-type Password" required>
+
+            <span id="signupError" class="error-message"></span>
+
+            <div class="button-group">
+                <button type="submit">Sign Up</button>
+                <button type="button" class="guest-button" onclick="window.location.href='/login'">Have an account? <strong>Log in</strong></button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let email = document.getElementById("email");
+            let password1 = document.getElementById("password1");
+            let password2 = document.getElementById("password2");
+            let signupError = document.getElementById("signupError");
+
+            fetch("/signup", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: email.value,
+                    password1: password1.value,
+                    password2: password2.value
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then((res) => res.json())
+            .then((res) => {
+                if (res.error == false)  {
+                    window.location.href = '/signup/verify';
+                } else {
+                    signupError.innerHTML = res.error;
+                    signupError.style.display = 'block';
+                }
+            })
+            .catch((err) => console.error('Error:', err));
+        });
+    </script>
+</body>
+</html>
