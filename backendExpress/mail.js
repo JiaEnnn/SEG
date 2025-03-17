@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 exports.sendMail = async (dests, subject, text, html) => {
     // send mail with defined transport object
     const mailOptions = {
-        from: '"UoSM SEG System" <uosm.segp@gmail.com>', // sender address
+        from: `"UoSM SEG System" <${process.env.MAIL}>`, // sender address
         to: dests,        // list of receivers
         subject: subject, // Subject line
         text: text,       // plain text body
