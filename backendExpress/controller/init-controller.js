@@ -1,8 +1,8 @@
-const db = require('./connectDB'),
+const db = require('../connectDB'),
   sequelize = db.sequelize,
   Sequelize = db.Sequelize;
 
-const initModels = require('./model/init-models');
+const initModels = require('../model/init-models');
 
 const models = initModels(sequelize);
 const User = models.users;
