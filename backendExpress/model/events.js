@@ -1,6 +1,14 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('events', {
+const Model = require('./MyModel');
+
+class Event extends Model {
+  constructor() {
+    super.constructor('eventID');
+  };
+};
+
+Event.initialise = (sequelize, DataTypes) => {
+  Event.init({
     eventID: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -81,4 +89,8 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+};
+module.exports = function(sequelize, DataTypes) {
+  Event.initialise(sequelize, DataTypes);
+  return Event;
 };
