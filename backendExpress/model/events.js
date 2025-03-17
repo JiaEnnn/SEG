@@ -9,11 +9,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     userID: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'userID'
+      }
     },
     eventOrgID: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true,
+      references: {
+        model: 'eventorg',
+        key: 'eventOrgID'
+      }
     },
     title: {
       type: DataTypes.STRING(100),
@@ -42,6 +50,20 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "eventID" },
+        ]
+      },
+      {
+        name: "userID",
+        using: "BTREE",
+        fields: [
+          { name: "userID" },
+        ]
+      },
+      {
+        name: "eventOrgID",
+        using: "BTREE",
+        fields: [
+          { name: "eventOrgID" },
         ]
       },
     ]
