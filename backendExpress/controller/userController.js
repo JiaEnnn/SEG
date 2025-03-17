@@ -10,7 +10,7 @@ const mail = require('../mail');
 // const User = models.user;
 // const UserType = models.usertype;
 // const PreserveUser = models.preserveuser;
-  
+
 // --- C ---
 // Create and Save a new User
 exports.create = async (user, options) => {
@@ -43,9 +43,9 @@ exports.update = async (values, options={}) => {
   return u;
 };
 // Update a User by the id in the request
-exports.updateByID = async (id, values) => 
-  await this.update(values,{where: {userID: id}}
-);
+exports.updateByID = async (id, values) => {
+  return await User.updateByID(id, values);
+};
 // --- D ---
 // Delete a User with the specified id in the request
 exports.delete = async (options) => {
