@@ -1,6 +1,6 @@
 'use strict';
 
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 
@@ -13,21 +13,21 @@ const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, 
         expiresIn: '1h', // Token expiration time
   });
 */
-const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorisation');
+// const authenticateToken = (req, res, next) => {
+//   const token = req.header('Authorisation');
 
-  if (!token) {
-    return res.status(401).json({ error: 'Authentication token missing' });
-  }
+//   if (!token) {
+//     return res.status(401).json({ error: 'Authentication token missing' });
+//   }
 
-  jwt.verify(token, secretKey, (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: 'Token is invalid'});
-    }
-    req.user = user;
-    next(); // Continue to the protected route
-  });
-};
+//   jwt.verify(token, secretKey, (err, user) => {
+//     if (err) {
+//       return res.status(403).json({ error: 'Token is invalid'});
+//     }
+//     req.user = user;
+//     next(); // Continue to the protected route
+//   });
+// };
 
 // R - Retrieve all
 router.get('/', controller.getAll);
@@ -42,6 +42,6 @@ router.get('/:id', controller.getByID);
 router.put('/:id', controller.update);
 
 // D - Delete with id
-router.delete('/:id', authenticateToken, controller.delete);
+router.delete('/:id', controller.delete);
 
 module.exports = router;

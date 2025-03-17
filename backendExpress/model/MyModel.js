@@ -28,6 +28,7 @@ class MyModel extends Model {
    * @param {JSON} options
    */
   static async create(obj, options = {}) {
+    options = setToJson(options);
     options.raw = this.raw;
     return await super.create(obj, options);
   }
@@ -36,6 +37,7 @@ class MyModel extends Model {
    * @param {JSON} options
    */
   static async findAll(options = {}) {
+    options = setToJson(options);
     options.raw = this.raw;
     return await super.findAll(options);
   }
@@ -45,6 +47,7 @@ class MyModel extends Model {
    * @param {JSON} options
    */
   static async findByID(id, options = {}) {
+    options = setToJson(options);
     options.raw = this.raw;
     return await super.findByPk(id, options);
   }
@@ -54,6 +57,7 @@ class MyModel extends Model {
    * @param {JSON} options
    */
   static async update(values, options = {}) {
+    options = setToJson(options);
     options.raw = this.raw;
     return await super.update(values, options);
   }
@@ -76,6 +80,7 @@ class MyModel extends Model {
    * @returns Promise The number of destroyed rows
    */
   static async delete(options = {}) {
+    options = setToJson(options);
     options.raw = this.raw;
     return await super.destroy(options);
   }
@@ -93,4 +98,9 @@ class MyModel extends Model {
   }
 };
 
+
+// insert empty json if it was null or undefined 
+function setToJson(obj) {
+  return (obj == null || obj == undefined)? {} : obj;
+}
 module.exports = MyModel;
