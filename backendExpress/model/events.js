@@ -23,6 +23,15 @@ module.exports = function(sequelize, DataTypes) {
         key: 'eventOrgID'
       }
     },
+    startDateTime: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
+    },
+    endDateTime: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     title: {
       type: DataTypes.STRING(100),
       allowNull: false
@@ -33,7 +42,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     image: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
+    },
+    registrationEndsAt: {
+      type: DataTypes.DATE,
+      allowNull: true
     },
     isVisible: {
       type: DataTypes.BOOLEAN,
@@ -42,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'events',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
