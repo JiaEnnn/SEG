@@ -6,10 +6,6 @@ const zlib = require('node:zlib');
 class User extends Model {
   static _iterations = 128;
   static _byteCnt = 128;
-  
-  constructor() {
-    super.constructor('userID');
-  };
 
   // getter
   get iterations() {
@@ -28,7 +24,7 @@ class User extends Model {
     const password = this.hashing(user.password,salt);
     user.password = this.zip(password);
 
-    return await super.create(obj, options);
+    return await super.create(user, options);
   };
 
   /**

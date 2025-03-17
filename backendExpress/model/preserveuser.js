@@ -1,11 +1,7 @@
 const Sequelize = require('sequelize');
 const Model = require('./MyModel');
 
-class PreserveUser extends Model {
-  constructor() {
-    super.constructor('userID');
-  }
-};
+class PreserveUser extends Model {};
 
 // Model Initialization
 PreserveUser.initialise = (sequelize, DataTypes) => {

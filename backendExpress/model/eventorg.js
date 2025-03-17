@@ -1,11 +1,7 @@
 const Sequelize = require('sequelize');
 const Model = require('./MyModel');
 
-class EventOrg extends Model {
-  constructor() {
-    super.constructor('eventOrgID');
-  };
-};
+class EventOrg extends Model {};
 
 EventOrg.initialise = (sequelize, DataTypes) => {
   EventOrg.init({
