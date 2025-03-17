@@ -30,18 +30,20 @@ const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, 
 // };
 
 // R - Retrieve all
-router.get('/', controller.getAll);
+router.get('/', controller.findAll);
 
 // C - Create new
 router.post('/', controller.create);
 
 // R - Retrieve with id
-router.get('/:id', controller.getByID);
+router.get('/:id', controller.findByID);
 
 // U - Update with id
-router.put('/:id', controller.update);
+router.put('/', controller.update);
+router.put('/:id', controller.updateByID);
 
 // D - Delete with id
-router.delete('/:id', controller.delete);
+router.delete('/', controller.delete);
+router.delete('/:id', controller.deleteByID);
 
 module.exports = router;

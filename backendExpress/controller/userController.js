@@ -14,7 +14,7 @@ const mail = require('../mail');
 // --- C ---
 // Create and Save a new User
 exports.create = async (user, options) => {
-  const u = await models.User.create(user, options);
+  const u = await User.create(user, options);
   // console.log(u);
   return u;
 };

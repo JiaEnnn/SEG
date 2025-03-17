@@ -4,11 +4,16 @@
 
 require('dotenv').config({ path: './connectDB.env' });
 const express = require("express");
+const app = express();
+
 const path = require("path");
 const userController = require("./backendExpress/controller/userController");
 const sessions = require('express-session');
 const cookieParser = require('cookie-parser');
-const app = express();
+
+// api route for event
+const eventRoutes = require('./backendExpress/route/event.routes');
+app.use('/api/events/', eventRoutes);
 
 // Middleware for parsing requests
 app.use(express.json());
