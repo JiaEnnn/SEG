@@ -1,6 +1,6 @@
 'use strict';
 
-const { Event } = require('./init-controller');
+const { Event, EventOrg } = require('./init-controller');
 
 
 // --- C ---
@@ -35,12 +35,9 @@ exports.create = async (req, res) => {
  * @returns res.json (error?, message, data)
  */
 exports.findAll = async (req, res) => {
-  if (!keyExists(req, 'body')) {
-    emptyError(res, 'req.body');
-    return;
-  };
+  const options = (keyExists(req, 'body'))? req.body.options : undefined;
 
-  const result = await Event.findAll(req.body.options);
+  const result = await Event.findAll(options);
   res.json({
     error: false,
     message: `Select events query ran successfully`,
@@ -201,6 +198,21 @@ exports.deleteByID = async (req, res) => {
   })
   return result;
 };
+
+
+// event orgs
+exports.findAllOrg = async (req, res) => {
+  const options = (keyExists(req, 'body'))? req.body.options : undefined;
+
+  const result = await EventOrg.findAll(options);
+  res.json({
+    error: false,
+    message: `Select events organisers query ran successfully`,
+    data: result
+  });
+  return result;
+};
+
 
 function keyExists(json, key) {
   return !(json[key] == undefined || json[key] == null);

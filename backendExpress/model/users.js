@@ -28,6 +28,15 @@ class User extends Model {
   };
 
   /**
+   * Search for multiple instances with an email address
+   * @param {String} email
+   */
+  static async findByEmail(email) {
+    const options = {where: {email: email}};
+    return await this.findAll(options);
+  };
+
+  /**
    * Return userType information from
    * user with userID 'id'
    * @param {INTEGER} id 

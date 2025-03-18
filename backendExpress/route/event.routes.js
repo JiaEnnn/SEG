@@ -29,13 +29,19 @@ const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, 
 //   });
 // };
 
+
+// event Organiser
+router.get('/org', controller.findAllOrg);
+
 // R - Retrieve
 router.post('/findBy', controller.findBy);
-router.post('/find', controller.findAll);
-router.get('/find/:id', controller.findByID);
+router.get('/', controller.findAll);
 
 // C - Create new
 router.post('/', controller.create);
+
+// R
+router.get('/:id', controller.findByID);
 
 // U - Update with id
 router.put('/', controller.update);
