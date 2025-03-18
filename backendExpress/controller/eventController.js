@@ -53,7 +53,8 @@ exports.findAll = async (req, res) => {
  * @param {INTEGER} req.params.id
  * @param {JSON} req.body.options (optional)
  * @returns res.json (error?, message, data)
- */exports.findByID = async (req, res) => {
+ */
+exports.findByID = async (req, res) => {
   if (!keyExists(req, 'params')) {
     emptyError(res, 'req.params');
     return;
@@ -68,6 +69,48 @@ exports.findAll = async (req, res) => {
   res.json({
     error: false,
     message: `Event selection with ID ran successfully`,
+    data: result
+  });
+  return result;
+};
+/**
+ * 
+ * within req.body:
+ * @param {String} [title=''] optional, WHERE `title` LIKE `{ val }`
+ * @param {Date}   afterDate  optional
+ * @param {Date}   beforeDate optional
+ * @param {Array}  [organiserIDs=[]] optional
+ * @param {'ASC'|'DESC'|false} [isOrderTitle      =false] optional
+ * @param {'ASC'|'DESC'|false} [isOrderDate       =false] optional
+ * @param {'ASC'|'DESC'|false} [isOrderRegiDate   =false] optional
+ * @param {'ASC'|'DESC'|false} [isOrderCreatedDate=false] optional
+ * @param {boolean} [isAvailable=true] true: registration aft today, else include all events not yet taken place
+ * @param {boolean} [inclHidden=false] true: show all, else dont show hidden
+ * @returns 
+ */
+exports.findBy = async (req, res) => {
+  if (!keyExists(req, 'body')) {
+    emptyError(res, 'req.body');
+    return;
+  };
+  const title = req.body.title;
+  const afterDate = req.body.afterDate; // change format
+  const beforeDate = req.body.beforeDate; // change format
+  const organiserIDs = req.body.organiserIDs;
+  const isOrderTitle = req.body.isOrderTitle;
+  const isOrderDate = req.body.isOrderDate;
+  const isOrderRegiDate = req.body.isOrderRegiDate;
+  const isOrderCreatedDate = req.body.isOrderCreatedDate;
+  const isAvailable = req.body.isAvailable;
+  const inclHidden = req.body.inclHidden;
+  
+  const result = await Event.findBy(
+    title, afterDate, beforeDate, organiserIDs, 
+    isOrderTitle, isOrderDate, isOrderRegiDate, isOrderCreatedDate, isAvailable, inclHidden
+  );
+  res.json({
+    error: false,
+    message: `Events filter applied successfully`,
     data: result
   });
   return result;

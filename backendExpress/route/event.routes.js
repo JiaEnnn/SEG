@@ -29,14 +29,13 @@ const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, 
 //   });
 // };
 
-// R - Retrieve all
-router.get('/', controller.findAll);
+// R - Retrieve
+router.post('/findBy', controller.findBy);
+router.post('/find', controller.findAll);
+router.get('/find/:id', controller.findByID);
 
 // C - Create new
 router.post('/', controller.create);
-
-// R - Retrieve with id
-router.get('/:id', controller.findByID);
 
 // U - Update with id
 router.put('/', controller.update);
