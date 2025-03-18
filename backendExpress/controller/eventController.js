@@ -4,7 +4,12 @@ const { Event } = require('./init-controller');
 
 
 // --- C ---
-// Create and Save
+/**
+ * 
+ * @param {JSON} req.body.obj
+ * @param {JSON} req.body.options (optional)
+ * @returns res.json (error?, message, data)
+ */
 exports.create = async (req, res) => {
   if (!keyExists(req, 'body')) {
     emptyError(res, 'req.body');
@@ -24,7 +29,11 @@ exports.create = async (req, res) => {
 };
 
 // --- R ---
-// Retrieve all from the database.
+/**
+ * 
+ * @param {JSON} req.body.options (optional)
+ * @returns res.json (error?, message, data)
+ */
 exports.findAll = async (req, res) => {
   if (!keyExists(req, 'body')) {
     emptyError(res, 'req.body');
@@ -39,8 +48,12 @@ exports.findAll = async (req, res) => {
   });
   return result;
 };
-// Find a single event with an id
-exports.findByID = async (req, res) => {
+/**
+ * 
+ * @param {INTEGER} req.params.id
+ * @param {JSON} req.body.options (optional)
+ * @returns res.json (error?, message, data)
+ */exports.findByID = async (req, res) => {
   if (!keyExists(req, 'params')) {
     emptyError(res, 'req.params');
     return;
@@ -61,6 +74,12 @@ exports.findByID = async (req, res) => {
 };
 
 // --- U ---
+/**
+ * 
+ * @param {JSON} req.body.values
+ * @param {JSON} req.body.options (optional)
+ * @returns res.json (error?, message, data)
+ */
 exports.update = async (req, res) => {
   if (!keyExists(req, 'body')) {
     emptyError(res, 'req.body');
@@ -75,7 +94,11 @@ exports.update = async (req, res) => {
   });
   return result;
 };
-// Update by the id in the request
+/**
+ * Update by the id in the request
+ * @param {INTEGER} req.params.id
+ * @returns res.json (error?, message, data)
+ */
 exports.updateByID = async (req, res) => {
   if (!keyExists(req, 'params')) {
     emptyError(res, 'req.params');
@@ -94,7 +117,11 @@ exports.updateByID = async (req, res) => {
   return result;
 };
 // --- D ---
-// Delete with the specified id in the request
+/**
+ * 
+ * @param {JSON} req.body.options (optional)
+ * @returns res.json (error?, message, data)
+ */
 exports.delete = async (req, res) => {
   if (!keyExists(req, 'body')) {
     emptyError(res, 'req.body');
@@ -108,6 +135,11 @@ exports.delete = async (req, res) => {
   });
   return result;
 };
+/**
+ * delete by id
+ * @param {JSON} req.params.id
+ * @returns res.json (error?, message, data)
+ */
 exports.deleteByID = async (req, res) => {
   if (!keyExists(req, 'params')) {
     emptyError(res, 'req.params');
