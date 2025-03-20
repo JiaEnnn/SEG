@@ -45,7 +45,7 @@ class MyModel extends Model {
     options.raw = this.raw;
     const json = {};
     json[Model.primaryKeyAttribute] = id;
-    return await super.findOne(json);
+    return await super.findByPk(id, options);
   }
 
   /**

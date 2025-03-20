@@ -11,6 +11,7 @@ const transporter = nodemailer.createTransport({
       pass: process.env.MAIL_PASS,
     },
 });
+// error ENOTFOUND when no internet
 exports.sendMail = async (dests, subject, text, html) => {
     // send mail with defined transport object
     const mailOptions = {

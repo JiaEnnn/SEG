@@ -83,7 +83,7 @@ app.get('/logout', (req, res) => {
 });
 app.get('/index/id', (req, res) => {
   res.json({id: process.env.USER});
-})
+});
 
 // Start the server
 const port = process.env.PORT || 5000;
