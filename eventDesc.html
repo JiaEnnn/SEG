@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./event.css" />
+  
+    <link rel="stylesheet" href="/style.css?v=2" />
+    <title>Profile Dropdown</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <img src="../Pictures/UoSMLogo.png" />
+      <ul class="navbar-list">
+        <li><a href="#">Maps</a></li>
+        <li><a href="#">Bookings</a></li>
+        <li><a href="#">Emergency</a></li>
+        <li><a href="eventPage.html">Events</a></li>
+      </ul>
+
+      <div class="profile-dropdown">
+        <div onclick="toggle()" class="profile-dropdown-btn">
+          <div class="profile-img">
+            <i class="fa-solid fa-circle"></i>
+          </div>
+
+          <span
+            >NG JIN
+            <i class="fa-solid fa-angle-down"></i>
+          </span>
+        </div>
+
+        <ul class="profile-dropdown-list">
+          <div class="profile-dropdown-list-item no-hover">
+            <img src="../Pictures/SteveJobs.jpg" alt="User Photo" class="profile-dropdown-img">
+            <div class="profile-info">
+              <span class="profile-name">Ng Jin</span>
+              <a href="profile.html" class="profile-link">View your profile</a>
+            </div>
+          </div>
+          
+
+          <hr />
+          
+          <li class="profile-dropdown-list-item">
+            <a href="inbox.html">
+              <i class="fas fa-envelope"></i> 
+               Inbox
+            </a>
+          </li>  
+
+          <li class="profile-dropdown-list-item">
+            <a href="analytics.html">
+              <i class="fa-solid fa-chart-line"></i>
+              Analytics
+            </a>
+          </li>
+
+          <li class="profile-dropdown-list-item">
+            <a href="settings.html">
+              <i class="fas fa-sliders-h"></i>
+                Settings
+            </a>
+          </li>        
+
+          <li class="profile-dropdown-list-item">
+            <a href="help.html">
+              <i class="fa-regular fa-circle-question"></i>
+              Help & Support
+            </a>
+          </li>          
+          <hr />
+
+          <li class="profile-dropdown-list-item">
+            <a href="/logout" id="logHref">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Log out
+            </a>
+          </li>     
+        </ul>
+      </div>
+    </nav>
+    <!--Here is the event part I added, need help with darkmode settings-->
+    <div id="container">
+        <button onclick="history.back()">back</button>
+        <h1 id="title">Title</h1>
+        <h3 id="org">Org</h3>
+        <h3 id="date">Date</h3>
+        <img id="image">
+        <br>
+        <p id="description">desc</p>
+        <br>
+        <h3 id="time">time</h3>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="settings.js"></script>
+    <script src="help.js"></script>
+    <script src="inbox.js"></script>
+    <script src="analytics.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+      fetch('http://localhost:5000/api/your-endpoint')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error fetching data:', error));
+
+      fetch("/index/id", {
+        method: "GET",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    }).then((res) => res.json())
+      .then((res) => {
+        const id = res.id;
+        document.getElementById("logHref").innerText = (id == -1)? 'Log In' : 'Log Out';
+      })
+      .catch((err) => console.error('Error:', err));
+    </script>
+    <script> 
+      // fetch event organisers and store it
+      // then fetch events and add them to eventList
+      // function for async
+      (async () => {
+        const eventID = await getParam('id');
+        // id not provided error
+        if (eventID == undefined || eventID == null) {
+            // show error 
+            alert('no id given');
+            return;
+        };
+
+        const eventOrgs = await getEventOrgs();
+        const event = await getEvent(eventID);
+        // no such event error
+        if (event == undefined || event == null || event == {}) {
+            alert('no event of given id');
+        }
+
+        createEventItem(event, eventOrgs);
+      })();
+
+      function getParam(key) {
+        const addr = window.location.search;
+        const paramList = new URLSearchParams(addr);
+        return paramList.get(key);
+      }
+      // separateed it for the async
+      async function getEventOrgs() {
+        let orgs = await fetch("/api/events/org", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        }).then((res) => res.json())
+        .then((res) => {
+          if (res.error == false)  {
+            return res.data;
+          } else {
+            alert(res.error);
+            console.error(res.error);
+          };
+        })
+        .catch((err) => console.error('Error:', err));
+
+        // sort it from [] to {id1: {}, id2: {}, ...}
+        let eventOrgs = {};
+        for (let i = 0; i < orgs.length; i++) {
+          const org = orgs[0];
+          const id = org.eventOrgID;
+          delete org.eventOrgID;
+          eventOrgs[id] = org;
+        };
+        return await eventOrgs;
+      }
+      // this getEvent is byID, hence is different from eventPage.html
+      async function getEvent(id, options) {
+        let json = {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        };
+
+        if (!(options == null || options == undefined || options == {})) {
+          Object.assign(json, {body: JSON.stringify(options)});
+        }
+        return await fetch(`/api/events/${id}`, json).then((res) => res.json())
+        .then((res) => {
+          if (res.error == false)  {
+            return res.data;
+          } else {
+            alert(res.error);
+            console.error(res.error);
+          };
+        })
+        .catch((err) => console.error('Error:', err));
+      };
+
+      // slightly different from eventPage function, mainly removed item
+      // and added image
+      function createEventItem(event, eventOrgs) {
+        // get data from event obj first
+        // alert('event: ' + JSON.stringify(event));
+        const date = toDate(event.startDateTime);
+        const title = event.title;
+        const org = (event.eventOrgID in eventOrgs)? 
+          eventOrgs[event.eventOrgID].name : 'None';
+        const startTime = toTime(event.startDateTime);
+        const endTime = toTime(event.endDateTime);
+        const time = (endTime == null)? 
+          startTime : startTime + ' - ' + endTime;
+        // new
+        const imgsrc = event.image;
+        const desc = event.description;
+
+        // alert('no error up till here' + org + ' ' + time + ' ' + title); 
+        // dateText, also created a class for this
+        const dateText = document.getElementById('date');
+        dateText.classList.add('date'); // class addition
+        dateText.textContent = date;
+
+        const titleText = document.getElementById('title');
+        titleText.classList.add('title');
+        titleText.textContent = title;
+
+        const orgText = document.getElementById('org');
+        orgText.classList.add('eventOrg');
+        orgText.textContent = org;
+
+        const timeText = document.getElementById('time');
+        timeText.classList.add('time');
+        timeText.textContent = time;
+
+        // new
+        const descText = document.getElementById('description');
+        descText.classList.add('desc');
+        descText.textContent = desc;
+        const image = document.getElementById('image');
+        // image.src = imgsrc; // incorrect atm
+        return item;
+      };
+
+      function addNewEvent(elem, event, eventOrgs) {
+        // <ul id="event-list">
+        //     <li></li> 
+        //     <li></li>
+        //     ...
+        // </ul>
+        const item = createEventItem(event, eventOrgs);
+        // eventList from global
+        elem.appendChild(item);
+      };
+      // function to format sequelize timestamp
+      function toDate(date) {
+        if (date == null) return null;
+        const formatter = new Intl.DateTimeFormat('en-GB', {
+          day: 'numeric',
+          month: 'short',
+          year: '2-digit',
+        });
+        return formatter.format(new Date(date));
+      }
+      function toTime(date) {
+        if (date == null) return null;
+        const formatter = new Intl.DateTimeFormat('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
+        return formatter.format(new Date(date));
+      }
+    </script>
+  </body>
+</html> 

@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser');
 
 // api route for event
 const eventRoutes = require('./backendExpress/route/event.routes');
-app.use('/api/events/', eventRoutes);
+app.use('/api/events', eventRoutes);
 
 // Middleware for parsing requests
 app.use(express.json());

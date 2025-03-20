@@ -1,0 +1,10 @@
+#event-div {
+  float: left;
+}
+.event-list li {
+ display: inline-block;
+ margin: 0 1rem;
+}
+#event-filter {
+  float: right;
+}
