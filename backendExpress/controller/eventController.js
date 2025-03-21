@@ -70,26 +70,19 @@ exports.findByID = async (req, res) => {
   });
   return result;
 };
-/**
- * 
- * within req.body:
- * @param {String} [title=''] optional, WHERE `title` LIKE `{ val }`
- * @param {Date}   afterDate  optional
- * @param {Date}   beforeDate optional
- * @param {Array}  [organiserIDs=[]] optional
- * @param {'ASC'|'DESC'|false} [isOrderTitle      =false] optional
- * @param {'ASC'|'DESC'|false} [isOrderDate       =false] optional
- * @param {'ASC'|'DESC'|false} [isOrderRegiDate   =false] optional
- * @param {'ASC'|'DESC'|false} [isOrderCreatedDate=false] optional
- * @param {boolean} [isAvailable=true] true: registration aft today, else include all events not yet taken place
- * @param {boolean} [inclHidden=false] true: show all, else dont show hidden
- * @returns 
- */
+/** @inheritdoc */
 exports.findBy = async (req, res) => {
+  // if no body, use full default
   if (!keyExists(req, 'body')) {
-    emptyError(res, 'req.body');
-    return;
+    const result = await Event.findBy();
+    res.json({
+      error: false,
+      message: `Events with default filter applied successfully`,
+      data: result
+    });
+    return result;
   };
+
   const title = req.body.title;
   const afterDate = req.body.afterDate; // change format
   const beforeDate = req.body.beforeDate; // change format

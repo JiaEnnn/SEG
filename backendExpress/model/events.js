@@ -11,47 +11,64 @@ class Event extends Model {
    * @param {Date}   afterDate 
    * @param {Date}   beforeDate 
    * @param {Array}  [organiserIDs=[]]
-   * @param {'ASC'|'DESC'|false} [isOrderTitle      =false] 
-   * @param {'ASC'|'DESC'|false} [isOrderDate       =false] 
-   * @param {'ASC'|'DESC'|false} [isOrderRegiDate   =false] 
-   * @param {'ASC'|'DESC'|false} [isOrderCreatedDate=false] 
+   * @param {'ASC'|'DESC'|false} [isOrderTitle      =false ] 
+   * @param {'ASC'|'DESC'|false} [isOrderDate       ='DESC'] 
+   * @param {'ASC'|'DESC'|false} [isOrderRegiDate   =false ] 
+   * @param {'ASC'|'DESC'|false} [isOrderCreatedDate=false ] 
    * @param {boolean} [isAvailable=true] true: registration aft today, else include all events not yet taken place
    * @param {boolean} [inclHidden=false] true: show all, else dont show hidden
    */
-  static async findBy (title='', afterDate=Sequelize.DataTypes.NOW, beforeDate, organiserIDs=[], 
+  static async findBy (title='', afterDate=new Date(), beforeDate, organiserIDs=[], 
     isOrderTitle=false, isOrderDate=false, isOrderRegiDate=false, 
     isOrderCreatedDate=false, isAvailable=true, inclHidden=false) {
+    
+    // half of the section is checking which param exists
+    // and how to integrate into json
+    
     // where 
-
-    const titleJson = {title: {
+    const titleJson = (title)? {title: {
       [Op.like]: `%${title}%`
-    }};
+    }} : undefined;
 
-    const beforeJson = (beforeDate == undefined)? {} : {[Op.lte]: beforeDate};
+    const beforeJson = (beforeDate)? {[Op.lte]: beforeDate} : undefined;
     const dateTimeJson = {
-      startDateTime: Object.assign(
+      startDateTime: Object.assign({}, 
         beforeJson, {[Op.gte]: afterDate}
     )};
     
     // prevent some incorrect typing thing occur, untested
-    const organiserID = (organiserIDs instanceof Number)? [organiserIDs] : organiserIDs;
-    const eventOrgs = (organiserID == [] || !(organiserID instanceof Array))? organiserID : [];
-    const orgJson = {eventOrgID: eventOrgs};
+    // currently only takes ID, no name available
+    const organiserID = (organiserIDs instanceof Number)? [organiserIDs] : undefined;
+    const orgJson = (organiserID)? {eventOrgID: organiserID} : undefined;
 
-    const availableJson = (isAvailable)? {registrationEndsAt: {
-      [Op.gte]: Sequelize.DataTypes.NOW,
-    }} : {};
+    // this can be overwritten by startDateTime above
+    const availableJson = (isAvailable)? {
+      registrationEndsAt: {
+        [Op.or]: {
+          [Op.gte]: new Date(),
+          [Op.eq]: null,
+        }
+      },
+      startDateTime: {
+        [Op.gte]: new Date(),
+      }} : undefined;
 
     const visibleJson = (inclHidden)? {} : {isVisible: true};
 
-    const whereJson = Object.assign({}, titleJson, dateTimeJson, orgJson, availableJson, visibleJson);
+    const whereJson = Object.assign({}, titleJson, availableJson, dateTimeJson, orgJson, visibleJson);
 
     // ordering
-    const orderByTitle       = (!isOrderTitle)?       [] : ['title', isOrderTitle];
-    const orderByDate        = (!isOrderDate)?        [] : ['startDateTime', isOrderDate];
-    const orderByRegiDate    = (!isOrderRegiDate)?    [] : ['registrationEndsAt', isOrderRegiDate];
-    const orderByCreatedDate = (!isOrderCreatedDate)? [] : ['createdAt', isOrderCreatedDate];
-    const orderingArr = [orderByTitle, orderByDate, orderByRegiDate, orderByCreatedDate];
+    const orderByTitle       = (!isOrderTitle)?       undefined : ['title', isOrderTitle];
+    const orderByDate        = (!isOrderDate)?        undefined : ['startDateTime', isOrderDate];
+    const orderByRegiDate    = (!isOrderRegiDate)?    undefined : ['registrationEndsAt', isOrderRegiDate];
+    const orderByCreatedDate = (!isOrderCreatedDate)? undefined : ['createdAt', isOrderCreatedDate];
+    const orderingArr = [];
+    const temp = [orderByDate, orderByTitle, orderByRegiDate, orderByCreatedDate];
+    for (let i = 0; i < temp.length; i++) {
+      const o = temp[i];
+
+      if (o) orderingArr.push(o);
+    };
 
     return await Event.findAll({
       where: whereJson,

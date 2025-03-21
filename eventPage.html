@@ -178,23 +178,27 @@
       }
       async function getEvents(options={}) {
         let json = {
-          method: "GET",
+          method: "POST",
+          body: options,
           headers: {
             "Content-type": "application/json; charset=UTF-8"
           }
         };
         
+        // const newOptions = Object.assign(defOptions, options);
+        
         // this if statement capable of creating error when modified, be very aware
-        if (options == null || options == undefined || options == {}) {
-          Object.assign(json, {body: JSON.stringify(options)});
-        }
+        // Object.assign(json, {body: JSON.stringify(newOptions)});
+        // if (options == null || options == undefined || options == {}) {
+        //   Object.assign(json, {body: JSON.stringify(options)});
+        // }
 
-        return await fetch("/api/events", json).then((res) => res.json())
+        return await fetch("/api/events/findBy", json).then((res) => res.json())
         .then((res) => {
           if (res.error == false)  {
             return res.data;
           } else {
-            alert(res.error);
+            alert(res.message);
             console.error(res.error);
           };
         })

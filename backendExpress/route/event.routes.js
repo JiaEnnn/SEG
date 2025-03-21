@@ -34,6 +34,7 @@ const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, 
 router.get('/org', controller.findAllOrg);
 
 // R - Retrieve
+// eventPage on default use findBy
 router.post('/findBy', controller.findBy);
 router.get('/', controller.findAll);
 
