@@ -11,6 +11,7 @@ const { Event, EventOrg } = require('./init-controller');
  * @returns res.json (error?, message, data)
  */
 exports.create = async (req, res) => {
+  console.log('body: ' + req.body);
   if (!keyExists(req, 'body')) {
     emptyError(res, 'req.body');
     return;

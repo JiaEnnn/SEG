@@ -11,14 +11,14 @@ const userController = require("./backendExpress/controller/userController");
 const sessions = require('express-session');
 const cookieParser = require('cookie-parser');
 
-// api route for event
-const eventRoutes = require('./backendExpress/route/event.routes');
-app.use('/api/events', eventRoutes);
-
 // Middleware for parsing requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// api route for event
+const eventRoutes = require('./backendExpress/route/event.routes');
+app.use('/api/events', eventRoutes);
 
 // Sessions
 app.use(sessions({
