@@ -140,22 +140,29 @@
         .then(data => console.log(data))
         .catch(error => console.error('Error fetching data:', error));
 
-      let id;
-      fetch("/index/id", {
-        method: "GET",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-      }).then((res) => res.json())
-      .then((res) => {
-        id = res.id;
+      getID().then((id) => {
+        alert(id);
         document.getElementById("logHref").innerText = (id == -1)? 'Log In' : 'Log Out';
-        return res.id;
-      })
-      .catch((err) => console.error('Error:', err));
+      });
 
       // submit button to create
       document.getElementById('form').addEventListener('submit', (event) => {
+        submit(event, document);
+      });
+
+      async function getID() {
+        return await fetch("/index/id", {
+          method: "GET",
+          headers: {
+              "Content-type": "application/json; charset=UTF-8"
+          }
+        }).then((res) => res.json())
+        .then((res) => {
+          return res.id;
+        })
+        .catch((err) => console.error('Error:', err));
+      }
+      async function submit(event, document) {
         event.preventDefault();
         const eventOrgID = document.getElementById('org').value;
         
@@ -172,10 +179,9 @@
         // alert('registrationEndsAt ' + document.getElementById('endDateTime').value);
         const isVisible = document.getElementById('isVisible').checked;
 
-
         const body = {
           obj: {
-            userID: id,
+            userID: await getID(),
             eventOrgID: eventOrgID,
             startDateTime: startDateTime,
             // endDateTime: endDateTime, //
@@ -186,6 +192,7 @@
             isVisible: isVisible,
           },
         };
+        alert(JSON.stringify(body));
         const json = {
           method: 'POST',
           body: JSON.stringify(body),
@@ -202,8 +209,8 @@
               alert('Error: ' + res.message);
             }
         })
-        .catch((err) => alert('Error:', err));
-      });
+        .catch((err) => alert('Error:', err)); // doesn't show error
+      }
     </script>
     <script> 
       const title = document.getElementById('title');
