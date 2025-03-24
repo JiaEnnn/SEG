@@ -140,9 +140,8 @@
         .then(data => console.log(data))
         .catch(error => console.error('Error fetching data:', error));
 
-      getID().then((id) => {
-        alert(id);
-        document.getElementById("logHref").innerText = (id == -1)? 'Log In' : 'Log Out';
+      getID().then(async (id) => {
+        if (!await userExists(id)) window.location.href = 'eventPage.html';
       });
 
       // submit button to create
@@ -159,6 +158,18 @@
         }).then((res) => res.json())
         .then((res) => {
           return res.id;
+        })
+        .catch((err) => console.error('Error:', err));
+      }
+      async function userExists(id) {
+        return await fetch(`/index/id/${id}`, {
+          method: "GET",
+          headers: {
+              "Content-type": "application/json; charset=UTF-8"
+          }
+        }).then((res) => res.json())
+        .then((res) => {
+          return res.exists;
         })
         .catch((err) => console.error('Error:', err));
       }
@@ -209,7 +220,7 @@
               alert('Error: ' + res.message);
             }
         })
-        .catch((err) => alert('Error:', err)); // doesn't show error
+        .catch((err) => alert('Error:', err)); // doesn't show 
       }
     </script>
     <script> 
