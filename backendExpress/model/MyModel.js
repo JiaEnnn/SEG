@@ -17,7 +17,6 @@ class MyModel extends Model {
    * @param {JSON} options
    */
   static async create(obj, options = {}) {
-    console.log('called');
     options = setToJson(options);
     options.raw = this.raw;
     return await super.create(obj, options);

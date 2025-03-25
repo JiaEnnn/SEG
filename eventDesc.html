@@ -87,7 +87,7 @@
     </nav>
     <!--Here is the event part I added, need help with darkmode settings-->
     <div id="container">
-        <button onclick="history.back()">back</button>
+        <button onclick="back()">back</button>
         <h1 id="title">Title</h1>
         <h3 id="org">Org</h3>
         <h3 id="date">Date</h3>
@@ -146,6 +146,13 @@
         createEventItem(event, eventOrgs);
       })();
 
+      function back() {
+          if ('referrer' in document) {
+          window.location = document.referrer;
+        } else {
+          window.history.back();
+        }
+      }
       function getParam(key) {
         const addr = window.location.search;
         const paramList = new URLSearchParams(addr);

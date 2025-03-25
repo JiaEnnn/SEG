@@ -8,3 +8,10 @@
 #event-filter {
   float: right;
 }
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-size: 14px;
+  display: none;
+}

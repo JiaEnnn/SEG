@@ -90,6 +90,9 @@
         <button onclick="location.href = 'eventPage.html'">cancel</button>
         <h1>Create Event</h1>
         <br>
+        <label for="donotredirect">Don't show event details after creation </label>
+        <input type="checkbox" id="donotredirect" name="donotredirect">
+        <br>
         <label for="showOptional">Show Optional Fields: </label>
         <input type="checkbox" onclick="toggleBy(this,'optional')" id="showOptional" name="showOptional">
         <br>
@@ -116,6 +119,8 @@
             <label for="description" class="optional">Event description (optional):</label><br class="optional">
             <input type="text"       class="optional" id="description" name="description" placeholder="description">
             <br class="optional">
+
+            <!--image is unavailable-->
             <label for="image" class="optional">Image (optional):</label><br class="optional">
             <input type="file" class="optional" id="image" name="image" accept="image/*">
             <br class="optional">
@@ -203,7 +208,7 @@
             isVisible: isVisible,
           },
         };
-        alert(JSON.stringify(body));
+        // alert(JSON.stringify(body));
         const json = {
           method: 'POST',
           body: JSON.stringify(body),
@@ -215,10 +220,23 @@
         .then((res) => res.json())
         .then((res) => {
             if (res.error == false)  {
-              alert('created!');
+              if (document.getElementById('donotredirect').checked) {
+                alert('Event created!');
+              } else {
+                if (confirm('Event created! Show event details?')) {
+                  window.location.href = `eventDesc.html?id=${res.data.eventID}`;
+                } else {
+                  window.location.reload();
+                }
+              }
+              // if ('referrer' in document) {
+              //   window.location = document.referrer;
+              // } else {
+              //   window.history.back();
+              // }
             } else {
               alert('Error: ' + res.message);
-            }
+            };
         })
         .catch((err) => alert('Error:', err)); // doesn't show 
       }

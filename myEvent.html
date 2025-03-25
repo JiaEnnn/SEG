@@ -89,13 +89,15 @@
     <div id="container">
         <div id="event-div">
             <!--Help changing these two to buttons, or to look better than these-->
-            <button hidden class="noguest" onclick="location.href = 'createEvent.html'">Create Event</button>
-            <button hidden class="noguest" onclick="location.href = 'myEvent.html'">Manage My Events</button>
-            <h1>Upcoming Events</h1>
+            <button onclick="back()">back</button>
+            <h1>Manage Events</h1>
+            <!--also temporary style-->
+            <button id="del" onclick="del()" style="background-color: red;" title="Delete the selected events">Delete</button>
+            <!-- <label id="error" class="error-message"></label> -->
             <ul class="event-list" id="event-list">
             </ul>
         </div>
-        <div id="event-filter">
+        <div hidden id="event-filter">
             <p>Filter</p>
         </div>
     </div>
@@ -114,14 +116,7 @@
         .catch(error => console.error('Error fetching data:', error));
       
         getID().then(async (id) => {
-          const exists = await userExists(id);
-          const noguests = document.getElementsByClassName('noguest');
-          // hide create & manage if not registered
-          for (let i=0; i<noguests.length; i++) {
-            const elem = noguests[i];
-            elem.hidden = !exists;
-          }
-          document.getElementById("logHref").innerText = (!exists)? 'Log In' : 'Log Out';
+          if (!await userExists(id)) window.location.href = 'eventPage.html';
         });
         
         async function getID() {
@@ -163,6 +158,76 @@
         getnAddEvents(eventList, eventOrgs);
       })();
 
+      function back() {
+          if ('referrer' in document) {
+          window.location = document.referrer;
+        } else {
+          window.history.back();
+        }
+      }
+      // deletion function
+      function del() {
+        const checkboxes = document.getElementsByClassName('checkbox');
+        // push eventID checked into arr
+        const arr = [];
+        for (let i=0; i<checkboxes.length; i++) {
+          const checkbox = checkboxes[i];
+          if (checkbox.checked) {
+            arr.push(checkbox.value);
+          }
+        };
+        if (arr.length == 0) {
+          alert('Nothing was selected for deletion!');
+          return;
+        }
+        delConfirmation(arr);
+      };
+      function delConfirmation(events) {
+        let text = `Are you sure you want to delete these: \n`;
+        for (let i=0; i<(Math.min(events.length, 10)); i++) {
+          text += ('- ' + JSON.parse(events[i]).title + '\n');
+        };
+        if (10 < events.length) text += `... and ${events.length-10} more`;
+        
+        if (confirm(text)) {
+          const arr = [];
+          for (let j=0; j<events.length; j++) {
+            arr.push(JSON.parse(events[j]).eventID);
+          }
+          // refresh after deletion
+          delFetch(arr).then((data) => {
+            if (data) {
+              window.location.reload();
+            } else {
+              alert('Error occurred, try again.');
+            }
+          });
+        };
+      }
+      async function delFetch(arr) {
+        let json = {
+          method: "DELETE",
+          body: JSON.stringify({
+            where: {
+              eventID: arr
+            }
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        };
+        return await fetch("/api/events", json).then((res) => res.json())
+        .then((res) => {
+          if (res.error == false)  {
+            return res.data;
+          } else {
+            alert(res.message);
+            console.error(res.error);
+          };
+        })
+        .catch((err) => console.error('Error:', err));
+      }
+
       async function getnAddEvents(elem, eventOrgs, options={}) {
         const list = await getEvents(options);
         // alert('list ' + JSON.stringify(list));
@@ -200,15 +265,21 @@
         };
         return await eventOrgs;
       }
-      async function getEvents(options={}) {
-        options.afterDate = new Date();
+      async function getEvents(options) {
+        const moptions = {
+          userID: await getID(),
+          isAvailable: false,
+          inclHidden: true,
+          afterDate: null,
+        };
         let json = {
           method: "POST",
           headers: {
             "Content-type": "application/json; charset=UTF-8"
           }
         };
-        if (options) Object.assign(json, {body: JSON.stringify(options)});
+        Object.assign(moptions, options);
+        if (moptions) Object.assign(json, {body: JSON.stringify(moptions)});
 
         
         // const newOptions = Object.assign(defOptions, options);
@@ -232,6 +303,7 @@
       };
 
       // event param is event class object/columns from database
+      // modified*
       function createEventItem(event, eventOrgs) {
         // get data from event obj first
         // alert('event: ' + JSON.stringify(event));
@@ -245,12 +317,25 @@
           startTime : startTime + ' - ' + endTime;
 
         // trying to fit the divs inside li
-        const item = document.createElement('li');
+        const li = document.createElement('li');
+        li.style.border = '3px solid black'; // temporary to know the shape
+        // <li> <div checkbox></> <div item></> </>
+
+        const checkDiv = document.createElement('div');
+        li.appendChild(checkDiv);
+        const checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
+        checkBox.classList.add('checkbox');
+        checkBox.value = JSON.stringify({eventID: event.eventID, title: event.title});
+        checkDiv.appendChild(checkBox);
+
+        const item = document.createElement('div');
+        li.appendChild(item);
         // show event details
         item.onclick = () => {
-          window.location.href = `eventDesc.html?id=${event.eventID}`;
+          sessionStorage.setItem('id', event.eventID);
+          window.location.href = `updateEvent.html`;
         };
-        item.style.border = '3px solid black'; // temporary to know the shape
         
         const containerL = document.createElement('div');
         const containerR = document.createElement('div');
@@ -279,7 +364,7 @@
         timeText.classList.add('time');
         timeText.textContent = time;
         containerR.appendChild(timeText);
-        return item;
+        return li;
       };
 
       function addNewEvent(elem, event, eventOrgs) {

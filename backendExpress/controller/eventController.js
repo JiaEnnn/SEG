@@ -11,7 +11,6 @@ const { Event, EventOrg } = require('./init-controller');
  * @returns res.json (error?, message, data)
  */
 exports.create = async (req, res) => {
-  console.log('body: ' + req.body);
   if (!keyExists(req, 'body')) {
     emptyError(res, 'req.body');
     return;
@@ -32,11 +31,11 @@ exports.create = async (req, res) => {
 // --- R ---
 /**
  * 
- * @param {JSON} req.body.options (optional)
+ * @param {JSON} req.body (optional)
  * @returns res.json (error?, message, data)
  */
 exports.findAll = async (req, res) => {
-  const options = (keyExists(req, 'body'))? req.body.options : undefined;
+  const options = (keyExists(req, 'body'))? req.body : undefined;
 
   const result = await Event.findAll(options);
   res.json({
@@ -94,10 +93,12 @@ exports.findBy = async (req, res) => {
   const isOrderCreatedDate = req.body.isOrderCreatedDate;
   const isAvailable = req.body.isAvailable;
   const inclHidden = req.body.inclHidden;
+  const userID = req.body.userID;
   
   const result = await Event.findBy(
     title, afterDate, beforeDate, organiserIDs, 
-    isOrderTitle, isOrderDate, isOrderRegiDate, isOrderCreatedDate, isAvailable, inclHidden
+    isOrderTitle, isOrderDate, isOrderRegiDate, isOrderCreatedDate, isAvailable, inclHidden,
+    userID
   );
   res.json({
     error: false,
@@ -153,7 +154,7 @@ exports.updateByID = async (req, res) => {
 // --- D ---
 /**
  * 
- * @param {JSON} req.body.options (optional)
+ * @param {JSON} req.body (optional)
  * @returns res.json (error?, message, data)
  */
 exports.delete = async (req, res) => {
@@ -161,7 +162,7 @@ exports.delete = async (req, res) => {
     emptyError(res, 'req.body');
     return;
   }
-  const result = await Event.delete(req.body.options);
+  const result = await Event.delete(req.body);
   res.json({
     error: false,
     message: `Event deletion query ran successfully`,

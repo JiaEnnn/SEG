@@ -15,12 +15,14 @@ class Event extends Model {
    * @param {'ASC'|'DESC'|false} [isOrderDate       ='DESC'] 
    * @param {'ASC'|'DESC'|false} [isOrderRegiDate   =false ] 
    * @param {'ASC'|'DESC'|false} [isOrderCreatedDate=false ] 
-   * @param {boolean} [isAvailable=true] true: registration aft today, else include all events not yet taken place
+   * @param {boolean} [isAvailable=true] true: registration aft today, else include all events
    * @param {boolean} [inclHidden=false] true: show all, else dont show hidden
+   * @param {Integer} userID
    */
-  static async findBy (title='', afterDate=new Date(), beforeDate, organiserIDs=[], 
+  static async findBy (title='', afterDate, beforeDate, organiserIDs=[], 
     isOrderTitle=false, isOrderDate=false, isOrderRegiDate=false, 
-    isOrderCreatedDate=false, isAvailable=true, inclHidden=false) {
+    isOrderCreatedDate=false, isAvailable=true, inclHidden=false,
+    userID=undefined) {
     
     // half of the section is checking which param exists
     // and how to integrate into json
@@ -31,11 +33,12 @@ class Event extends Model {
     }} : undefined;
 
     const beforeJson = (beforeDate)? {[Op.lte]: beforeDate} : undefined;
-    const dateTimeJson = {
+    const afterJson = (afterDate)? {[Op.gte]: afterDate} : undefined;
+    let dateTimeJson = (beforeJson || afterJson)? {
       startDateTime: Object.assign({}, 
-        beforeJson, {[Op.gte]: afterDate}
-    )};
-    
+        beforeJson, afterJson
+    )} : undefined;
+
     // prevent some incorrect typing thing occur, untested
     // currently only takes ID, no name available
     const organiserID = (organiserIDs instanceof Number)? [organiserIDs] : undefined;
@@ -55,7 +58,8 @@ class Event extends Model {
 
     const visibleJson = (inclHidden)? {} : {isVisible: true};
 
-    const whereJson = Object.assign({}, titleJson, availableJson, dateTimeJson, orgJson, visibleJson);
+    const userIDJson = (userID)? {userID: userID} : undefined;
+    const whereJson = Object.assign({}, titleJson, availableJson, dateTimeJson, orgJson, visibleJson, userIDJson);
 
     // ordering
     const orderByTitle       = (!isOrderTitle)?       undefined : ['title', isOrderTitle];
