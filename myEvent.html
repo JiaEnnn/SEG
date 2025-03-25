@@ -89,7 +89,7 @@
     <div id="container">
         <div id="event-div">
             <!--Help changing these two to buttons, or to look better than these-->
-            <button onclick="back()">back</button>
+            <button onclick="location.href = 'eventPage.html'">back</button>
             <h1>Manage Events</h1>
             <!--also temporary style-->
             <button id="del" onclick="del()" style="background-color: red;" title="Delete the selected events">Delete</button>
@@ -157,14 +157,6 @@
         const eventOrgs = await getEventOrgs();
         getnAddEvents(eventList, eventOrgs);
       })();
-
-      function back() {
-          if ('referrer' in document) {
-          window.location = document.referrer;
-        } else {
-          window.history.back();
-        }
-      }
       // deletion function
       function del() {
         const checkboxes = document.getElementsByClassName('checkbox');
@@ -310,7 +302,7 @@
         const date = toDate(event.startDateTime);
         const title = event.title;
         const org = (event.eventOrgID in eventOrgs)? 
-          eventOrgs[event.eventOrgID].name : 'None';
+          eventOrgs[event.eventOrgID].name : 'Organiser: None';
         const startTime = toTime(event.startDateTime);
         const endTime = toTime(event.endDateTime);
         const time = (endTime == null)? 

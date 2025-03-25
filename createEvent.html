@@ -180,7 +180,8 @@
       }
       async function submit(event, document) {
         event.preventDefault();
-        const eventOrgID = document.getElementById('org').value;
+        let eventOrgID = document.getElementById('org').value;
+        if (eventOrgID == 'null') eventOrgID = null;
         
         const startDateTime = document.getElementById('startDateTime').value;
         

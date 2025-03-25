@@ -238,7 +238,7 @@
         const date = toDate(event.startDateTime);
         const title = event.title;
         const org = (event.eventOrgID in eventOrgs)? 
-          eventOrgs[event.eventOrgID].name : 'None';
+          eventOrgs[event.eventOrgID].name : 'Organiser: None';
         const startTime = toTime(event.startDateTime);
         const endTime = toTime(event.endDateTime);
         const time = (endTime == null)? 
