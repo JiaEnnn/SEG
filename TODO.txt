@@ -1,2 +1,0 @@
-title for each page
-arrangement (by date) in myEvent
