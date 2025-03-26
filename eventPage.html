@@ -95,7 +95,7 @@
             <ul class="event-list" id="event-list">
             </ul>
         </div>
-        <div id="event-filter">
+        <div hidden id="event-filter">
             <p>Filter</p>
         </div>
     </div>
@@ -160,7 +160,9 @@
         // errors that could occur: connection refused/error        
         // after fetch, send information into events
         const eventOrgs = await getEventOrgs();
-        getnAddEvents(eventList, eventOrgs);
+        getnAddEvents(eventList, eventOrgs, {
+          isOrderDate: 'ASC'
+        });
       })();
 
       async function getnAddEvents(elem, eventOrgs, options={}) {

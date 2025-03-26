@@ -182,7 +182,6 @@
         .catch((err) => console.error('Error:', err));
       }
       async function submit(event, document) {
-        alert('in');
         event.preventDefault();
         let eventOrgID = document.getElementById('org').value;
         if (eventOrgID == 'null') eventOrgID = null;

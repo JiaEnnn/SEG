@@ -155,7 +155,9 @@
         // errors that could occur: connection refused/error        
         // after fetch, send information into events
         const eventOrgs = await getEventOrgs();
-        getnAddEvents(eventList, eventOrgs);
+        getnAddEvents(eventList, eventOrgs, {
+          isOrderDate: 'ASC'
+        });
       })();
       // deletion function
       function del() {
