@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "mocha": "^11.1.0",
+    "sequelize-cli": "^6.6.2",
     "supertest": "^7.1.0"
   }
 }
