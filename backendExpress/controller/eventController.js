@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
     return;
   }
   const result = await Event.create(req.body.obj, req.body.options);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Event created successfully`,
     data: result
@@ -38,7 +38,7 @@ exports.findAll = async (req, res) => {
   const options = (keyExists(req, 'body'))? req.body : undefined;
 
   const result = await Event.findAll(options);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Select events query ran successfully`,
     data: result
@@ -63,7 +63,7 @@ exports.findByID = async (req, res) => {
   const options = (keyExists(req, 'body'))? req.body : {};
 
   const result = await Event.findByID(req.params.id, options);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Event selection with ID ran successfully`,
     data: result
@@ -75,7 +75,7 @@ exports.findBy = async (req, res) => {
   // if no body, use full default
   if (!keyExists(req, 'body')) {
     const result = await Event.findBy();
-    res.json({
+    res.status(200).json({
       error: false,
       message: `Events with default filter applied successfully`,
       data: result
@@ -100,7 +100,7 @@ exports.findBy = async (req, res) => {
     isOrderTitle, isOrderDate, isOrderRegiDate, isOrderCreatedDate, isAvailable, inclHidden,
     userID
   );
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Events filter applied successfully`,
     data: result
@@ -122,7 +122,7 @@ exports.update = async (req, res) => {
   };
   
   const result = await Event.update(req.body.values, req.body.options);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Update query ran successfully`,
     data: result
@@ -148,7 +148,7 @@ exports.updateByID = async (req, res) => {
     return;
   }
   const result = await Event.updateByID(req.params.id, req.body);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Event ${req.params.id} updated.`,
     data: result
@@ -167,7 +167,7 @@ exports.delete = async (req, res) => {
     return;
   }
   const result = await Event.delete(req.body);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Event deletion query ran successfully`,
     data: result
@@ -190,7 +190,7 @@ exports.deleteByID = async (req, res) => {
   }
 
   const result = await Event.deleteByID(id);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `User ${req.params.id} deleted.`,
     data: result
@@ -204,7 +204,7 @@ exports.findAllOrg = async (req, res) => {
   const options = (keyExists(req, 'body'))? req.body.options : undefined;
 
   const result = await EventOrg.findAll(options);
-  res.json({
+  res.status(200).json({
     error: false,
     message: `Select events organisers query ran successfully`,
     data: result
