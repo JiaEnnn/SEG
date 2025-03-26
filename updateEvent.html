@@ -87,8 +87,8 @@
     </nav>
     <!--Here is the event part I added, need help with darkmode settings-->
     <div id="container">
-        <button onclick="location.href = 'eventPage.html'">cancel</button>
-        <h1>Create Event</h1>
+        <button onclick="location.href = 'myEvent.html'">cancel</button>
+        <h1>Update Event</h1>
         <br>
         <label for="donotredirect">Don't show event details after creation </label>
         <input type="checkbox" id="donotredirect" name="donotredirect">
@@ -127,7 +127,8 @@
             <label for="registrationEndsAt" class="optional">Registration Deadline: (optional):</label><br class="optional">
             <input type="datetime-local"    class="optional" id="registrationEndsAt" name="registrationEndsAt">
             <br class="optional">
-            <input type="submit">
+            <input type="submit" value="Update">
+            <!-- <button type="submit">Update</button> -->
             <br>
         </form>
     </div>
@@ -145,14 +146,16 @@
         .then(data => console.log(data))
         .catch(error => console.error('Error fetching data:', error));
 
-      getID().then(async (id) => {
+        getID().then(async (id) => {
         if (!await userExists(id)) window.location.href = 'eventPage.html';
       });
 
       // submit button to create
-      document.getElementById('form').addEventListener('submit', (event) => {
-        submit(event, document);
+      document.getElementById('form').addEventListener('submit', async (event) => {
+        await submit(event, document);
       });
+
+      toggleBy(document.getElementById('showOptional'), 'optional');
 
       async function getID() {
         return await fetch("/index/id", {
@@ -179,21 +182,22 @@
         .catch((err) => console.error('Error:', err));
       }
       async function submit(event, document) {
+        alert('in');
         event.preventDefault();
         let eventOrgID = document.getElementById('org').value;
         if (eventOrgID == 'null') eventOrgID = null;
-        
+
         const startDateTime = document.getElementById('startDateTime').value;
-        
+
         const endDateTimeV = document.getElementById('endDateTime').value;
         const endDateTime = (endDateTimeV == '')? null : endDateTimeV;
-        
+
         const title = document.getElementById('title').value;
         const desc = document.getElementById('description').value;
         
         // const imageV = document.getElementById('image').value;
         // const image = (imageV == '')? null : image;
-
+        
         const regiV = document.getElementById('registrationEndsAt').value;
         const registrationEndsAt = (regiV == '')? null : regiV;
 
@@ -201,35 +205,34 @@
         const isVisible = document.getElementById('isVisible').checked;
 
         const body = {
-          obj: {
-            userID: await getID(),
-            eventOrgID: eventOrgID,
-            startDateTime: startDateTime,
-            endDateTime: endDateTime,
-            title: title,
-            description: desc,
-            // image: image, // 
-            registrationEndsAt: registrationEndsAt, 
-            isVisible: isVisible,
-          },
+          userID: await getID(),
+          eventOrgID: eventOrgID,
+          startDateTime: startDateTime,
+          endDateTime: endDateTime, 
+          title: title,
+          description: desc,
+          // image: image, // 
+          registrationEndsAt: registrationEndsAt,
+          isVisible: isVisible,
         };
         // alert(JSON.stringify(body));
         const json = {
-          method: 'POST',
+          method: 'PUT',
           body: JSON.stringify(body),
           headers: {
             "Content-type": "application/json; charset=UTF-8"
           }
         };
-        fetch('/api/events', json)
+
+        fetch(`/api/events/${sessionStorage.getItem('id')}`, json)
         .then((res) => res.json())
         .then((res) => {
             if (res.error == false)  {
               if (document.getElementById('donotredirect').checked) {
-                alert('Event created!');
+                alert('Event updated!');
               } else {
-                if (confirm('Event created! Show event details?')) {
-                  window.location.href = `eventDesc.html?id=${res.data.eventID}`;
+                if (confirm('Event updated! Show event details?')) {
+                  window.location.href = `eventDesc.html?id=${sessionStorage.getItem('id')}`;
                 } else {
                   window.location.reload();
                 }
@@ -245,28 +248,6 @@
         })
         .catch((err) => alert('Error:', err)); // doesn't show 
       }
-    </script>
-    <script> 
-      const title = document.getElementById('title');
-      const org = document.getElementById('org');
-      const description = document.getElementById('description');
-      const startDateTime = document.getElementById('startDateTime');
-      const endDateTime = document.getElementById('endDateTime');
-      const image = document.getElementById('image');
-
-      const registrationEndsAt = document.getElementById('registrationEndsAt');
-      const isVisible = document.getElementById('isVisible');
-      // fetch event organisers and store it
-      // then fetch events and add them to org selection option
-      // function for async
-      toggleBy(document.getElementById('showOptional'), 'optional');
-      (async () => {
-        const eventOrgs = await getEventOrgs();
-        addOptions(org, eventOrgs);
-        startDateTime.value = formatDate(new Date());
-      })();
-
-
       function toggleBy(checkbox, className) {
         const isChecked = checkbox.checked;
         const elems = document.getElementsByClassName(className);
@@ -275,11 +256,34 @@
           elem.hidden = !isChecked;
         }
       }
+    </script>
+    <script> 
+      // fetch event organisers and store it
+      // then fetch events and add them to org selection option
+      // function for async
+      
+      // const eventID = sessionStorage.getItem('id');
+      // if (!eventID) {
+      //   alert('This event do not exist!');
+      //   return;
+      // }
+      (async () => {
+        const eventOrgs = await getEventOrgs();
+        addOptions(document.getElementById('org'), eventOrgs);
 
+        const event = await getEventByID(sessionStorage.getItem('id'));
+        if (event == {} || !event) {
+          window.location.href = 'eventPage.html';
+          alert('No event with the given ID exist!');
+          return;
+        };
 
-      // separated it for the async, returns list instead
+        setContent(event, document);
+      })();
+
+      // separateed it for the async
       async function getEventOrgs() {
-        return await fetch("/api/events/org", {
+        let orgs = await fetch("/api/events/org", {
           method: "GET",
           headers: {
             "Content-type": "application/json; charset=UTF-8"
@@ -294,7 +298,69 @@
           };
         })
         .catch((err) => console.error('Error:', err));
+
+        return await orgs;
       }
+      //(return {id1: {}, id2: {}, ...})
+      // function changeOrgFormat(orgs) {
+      //   // sort it from [] to {id1: {}, id2: {}, ...}
+      //   let eventOrgs = {};
+      //   for (let i = 0; i < orgs.length; i++) {
+      //     const org = orgs[0];
+      //     const id = org.eventOrgID;
+      //     delete org.eventOrgID;
+      //     eventOrgs[id] = org;
+      //   };
+      //   return eventOrgs;
+      // }
+      async function getEventByID(id) {
+        let json = {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        };
+        // if (options) Object.assign(json, {body: JSON.stringify(options)});
+        return await fetch(`/api/events/${id}`, json).then((res) => res.json())
+        .then((res) => {
+          if (res.error == false)  {
+            return res.data;
+          } else {
+            alert(res.message);
+            console.error(res.error);
+          };
+        })
+        .catch((err) => console.error('Error:', err));
+      };
+      function setContent(event, document) {
+        const title = document.getElementById('title');
+        const org = document.getElementById('org');
+        const description = document.getElementById('description');
+        const startDateTime = document.getElementById('startDateTime');
+        const endDateTime = document.getElementById('endDateTime');
+        const image = document.getElementById('image');
+
+        const registrationEndsAt = document.getElementById('registrationEndsAt');
+        const isVisible = document.getElementById('isVisible');
+
+        // update org first, it has more steps
+        
+        for (let i=0; org.children.length; i++) {
+          const c = org.children[i];
+          if (c.value == event.eventOrgID || c.value == 'null' && event.eventOrgID == null) {
+            org.selectedIndex = i;
+            break;
+          };
+        }
+        title.value = event.title;
+        description.value = event.description;
+        startDateTime.value = formatDate(new Date(event.startDateTime));
+        if (event.endDateTime) endDateTime = formatDate(new Date(event.endDateTime));
+        // image ignored again
+        if (event.registrationEndsAt) registrationEndsAt.value = formatDate(new Date(event.registrationEndsAt));
+        isVisible.checked = event.isVisible;
+      }
+
       // add eventOrgs options to <select>
       function addOptions(elem, eventOrgs) {
         for (let i = 0; i < eventOrgs.length; i++) {
@@ -332,6 +398,9 @@
         });
         return formatter.format(new Date(date));
       }
+      // function toDateTime(dateTime) {
+
+      // }
     </script>
   </body>
 </html> 

@@ -44,7 +44,7 @@ class MyModel extends Model {
     options = setToJson(options);
     options.raw = this.raw;
     const json = {};
-    json[Model.primaryKeyAttribute] = id;
+    json[this.primaryKeyAttribute] = id;
     return await super.findByPk(id, options);
   }
 
@@ -65,7 +65,7 @@ class MyModel extends Model {
    */
   static async updateByID(id, values) {
     const json = {};
-    json[Model.primaryKeyAttribute] = id;
+    json[this.primaryKeyAttribute] = id;
     const options = { where: json };
     return await this.update(values, options);
   }

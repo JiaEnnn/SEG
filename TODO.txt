@@ -1,4 +1,2 @@
-- locale for date possibly,
-especially if it is:
-- Mar 23 (month, day), not:
-- 13/3
+title for each page
+arrangement (by date) in myEvent

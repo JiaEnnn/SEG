@@ -60,7 +60,7 @@ exports.findByID = async (req, res) => {
     emptyError(res, 'req.params.id');
     return;
   };
-  const options = (keyExists(req, 'body'))? req.body.options : {};
+  const options = (keyExists(req, 'body'))? req.body : {};
 
   const result = await Event.findByID(req.params.id, options);
   res.json({
@@ -135,6 +135,10 @@ exports.update = async (req, res) => {
  * @returns res.json (error?, message, data)
  */
 exports.updateByID = async (req, res) => {
+  if (!keyExists(req, 'body')) {
+    emptyError(res, 'req.body');
+    return;
+  };
   if (!keyExists(req, 'params')) {
     emptyError(res, 'req.params');
     return;
@@ -143,7 +147,7 @@ exports.updateByID = async (req, res) => {
     emptyError(res, 'req.params.id');
     return;
   }
-  const result = await Event.updateByID(req.params.id);
+  const result = await Event.updateByID(req.params.id, req.body);
   res.json({
     error: false,
     message: `Event ${req.params.id} updated.`,
