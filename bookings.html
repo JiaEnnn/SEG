@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Bookings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="navbar-list">
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Book a Room</h2>
+        <label for="date">Select Date:</label>
+        <input type="date" id="date">
+        
+        <label for="time">Select Time:</label>
+        <input type="time" id="time">
+
+        <div id="room-grid"></div>
+
+        <button id="submitBooking">Submit Booking</button>
+    </div>
+
+    <script src="bookings.js"></script>
+</body>
+</html>
