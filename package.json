@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "backEnd.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --quit"
   },
   "keywords": [],
   "author": "",
